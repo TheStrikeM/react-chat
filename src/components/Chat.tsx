@@ -38,11 +38,17 @@ function Chat() {
             <Grid
                 container
                 justify={'center'}
-                style={{height: window.innerHeight - 50, marginTop: '30px'}}
+                style={{height: window.innerHeight - 50, marginTop: 10}}
             >
                 <div style={{width: '100%', height: '60vh', border: '1px solid gray', overflowY: 'auto'}}>
                     {messages.map((message: any) => 
-                        <div>
+                        <div style={{
+                            margin: 10,
+                            border: user.uid == message.uid ? '2px solid green' : '2px dashed red',
+                            marginLeft: user.uid == message.uid ? 'auto' : '10px',
+                            width: 'fit-content',
+                            padding: 5
+                        }}>
                             <Grid container>
                                 <Avatar src={message.photoURL} />
                                 <div>{message.displayName}</div> 
