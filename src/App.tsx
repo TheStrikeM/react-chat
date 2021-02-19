@@ -6,7 +6,9 @@ import firebase from 'firebase'
 import 'firebase/firestore'
 import 'firebase/auth'
 import {useDispatch} from 'react-redux'
+import {useAuthState} from 'react-firebase-hooks/auth'
 import setSettings from './actions/auth'
+import Loader from './components/Loader'
 
 function App() {
 
@@ -21,15 +23,21 @@ function App() {
     appId: "1:425929769298:web:32266aecab477f35117a8b",
     measurementId: "G-0FPLDL1KWB"
   }
-  
+    
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  
+    
   const auth = firebase.auth()
   const firestore = firebase.firestore()
-
+  
   dispatch(setSettings({auth, firestore}))
+
+  const [ user, loading, error ] = useAuthState(auth)
+
+  if (loading) {
+    return <Loader />
+  }
 
   return (
     <>
