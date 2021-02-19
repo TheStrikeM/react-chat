@@ -2,6 +2,8 @@ import React from 'react'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import {useSelector} from 'react-redux'
 import {Container, Grid, TextField, Button} from '@material-ui/core';
+import {useCollectionData} from 'react-firebase-hooks/firestore';
+import Loader from './Loader';
 
 function Chat() {
     const {auth, firestore} = useSelector(({auth}: any) => ({
@@ -11,8 +13,16 @@ function Chat() {
     const [ user ] = useAuthState(auth)
     const [value, setValue] = React.useState("")
 
+    const [messages, loading] = useCollectionData(
+        firestore.collection('messages').orderBy('createdAt')
+    )
+
     const sendMessage = async () => {
         console.log(value)
+    }
+
+    if (loading) {
+        return <Loader />
     }
 
     return (
@@ -31,7 +41,7 @@ function Chat() {
                         style={{width: '100%', marginTop: '30px'}}
                     >
                         <TextField value={value} onChange={e => setValue(e.target.value)} fullWidth rowsMax={2} variant={"outlined"}/>
-                        <Button variant={"outlined"}>Отправить</Button>
+                        <Button onClick={sendMessage} variant={"outlined"}>Отправить</Button>
                 </Grid>
             </Grid>
         </Container>
